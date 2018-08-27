@@ -93,7 +93,21 @@ class Conv2D:
                 return Number_of_ops, output_tensor
         else:
             #print "Random mode"
-            self.rand_kernel =torch.randn(self.kernel_size)
+            for out_count in range(0, self.o_channel):
+                rand_kernel = torch.randn( self.in_channel, self.kernel_size, self.kernel_size)
+                Number_of_ops = 0
+
+                for i in range(0, image_row):
+                    for j in range(0, image_col):
+                        out = torch.mul(rand_kernel.float(),
+                                        self.input_image[:, i * self.stride: i * self.stride + self.kernel_size,
+                                        j * self.stride: j * self.stride + self.kernel_size])
+                        Number_of_ops += self.kernel_size * self.kernel_size * self.in_channel
+                        output_tensor[i][j][out_count] = out.sum()
+                        Number_of_ops += self.kernel_size * self.kernel_size * self.in_channel - 1
+
+            return Number_of_ops, output_tensor
+
 
 
 
