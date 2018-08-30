@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import numpy as np
 import torch
 import torchvision
@@ -22,7 +23,7 @@ class Conv2D:
 
         image_height = input_image.shape[1]
         image_width = input_image.shape[2]
-        print image_width, image_height
+        #print image_width, image_height
 
         image_row = int((image_height - self.kernel_size)/self.stride + 1)
         image_col = int((image_width - self.kernel_size)/self.stride + 1)
@@ -33,7 +34,6 @@ class Conv2D:
 
         if self.mode == 'known':
             if self.o_channel == 1:
-                print("Task1")
                 kernel.append(torch.stack([self.k1 for i in range(self.in_channel)]))
 
                 for k_count in range(0, self.o_channel):
@@ -48,12 +48,9 @@ class Conv2D:
                             output_tensor[i][j] = out.sum()
                             Number_of_ops += self.kernel_size * self.kernel_size * self.in_channel - 1
 
-                    print ("Task 1: Total operations for k" + str(k_count) + " is " + str(Number_of_ops))
-
                     return Number_of_ops, output_tensor
 
             elif self.o_channel == 2:
-                print("Task2")
                 kernel.append(torch.stack([self.k4 for i in range(self.in_channel)]))
                 kernel.append(torch.stack([self.k5 for i in range(self.in_channel)]))
 
@@ -68,12 +65,9 @@ class Conv2D:
                             Number_of_ops += self.kernel_size * self.kernel_size * self.in_channel
                             output_tensor[i][j][k_count] = out.sum()
                             Number_of_ops += self.kernel_size * self.kernel_size * self.in_channel - 1
-                    print ("Task 2: Total operations for k" + str(k_count) + " is " + str(Number_of_ops))
-
 
                 return Number_of_ops, output_tensor
             else:
-                print("Task3")
                 kernel.append(torch.stack([self.k1 for i in range(self.in_channel)]))
                 kernel.append(torch.stack([self.k2 for i in range(self.in_channel)]))
                 kernel.append(torch.stack([self.k3 for i in range(self.in_channel)]))
@@ -88,13 +82,11 @@ class Conv2D:
                             Number_of_ops += self.kernel_size * self.kernel_size * self.in_channel
                             output_tensor[i][j][k_count] = out.sum()
                             Number_of_ops += self.kernel_size * self.kernel_size * self.in_channel - 1
-                    print ("Task 3: Total operations for k" + str(k_count) + " is " + str(Number_of_ops))
 
                 return Number_of_ops, output_tensor
         else:
-            #print "Random mode"
             for out_count in range(0, self.o_channel):
-                rand_kernel = torch.randn( self.in_channel, self.kernel_size, self.kernel_size)
+                rand_kernel = torch.randn(self.in_channel, self.kernel_size, self.kernel_size)
                 Number_of_ops = 0
 
                 for i in range(0, image_row):
