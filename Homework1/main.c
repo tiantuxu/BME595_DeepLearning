@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-int c_conv(int in_channel, int o_channel, int kernel_size, int stride) {
+long double c_conv(int in_channel, int o_channel, int kernel_size, int stride) {
     float ***kernel = (float***)malloc(in_channel*sizeof(float**));
     float ***out_array = (float***)malloc(o_channel*sizeof(float***));
     
@@ -103,7 +103,7 @@ int main(){
     int stride = 1;
     int kernel_size = 3;
     int i, j, k;
-    int Num_of_ops;
+    long double Num_of_ops;
 
     clock_t start, end;
 
