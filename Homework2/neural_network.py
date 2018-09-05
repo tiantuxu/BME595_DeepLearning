@@ -30,8 +30,8 @@ class NeuralNetwork:
         bias = torch.ones((1, y)).type(torch.DoubleTensor)
         for i in range(self.num_layers - 1):
             in_mtx = torch.cat((bias, output), 0)
-            theta_t = torch.t(self.theta[self.key[i]])  # Transpose theta for multiplication
-            out_mtx = torch.mm(theta_t, in_mtx)  # Perform matrix multiplication thetaT*x
+            theta_t = torch.t(self.theta[self.key[i]])
+            out_mtx = torch.mm(theta_t, in_mtx)
             output = 1.0 / (1.0 + np.exp(-out_mtx))
 
         return output
