@@ -62,8 +62,9 @@ class NnImg2Num:
                     onehot_target[n][target[n]] = 1
                 output = self.model(data.view(self.batch, self.input_size))
                 value, index = torch.max(output, 1)
+                loss = self.loss(output, onehot_target)
 
-                validation_loss += (onehot_target - output).pow(2).sum()/2.0
+                validation_loss += float(loss.data)
 
                 for n in range(len(target)):
                     if index[i] == target[i]:
@@ -79,7 +80,7 @@ class NnImg2Num:
             accuracy, validation_loss = validation()
 
             print("Epoch = " + str(i + 1) + ", Training loss = " + str(float(training_loss) / (len(self.train_loader.dataset) / self.batch)) + ", time =  " + str(float(total_time)))
-            print("Epoch = " + str(i + 1) + ", Validation loss = " + str(float(validation_loss)/len(self.test_loader.dataset)) + " , Validation Accuracy = " + str(float(accuracy)))
+            print("Epoch = " + str(i + 1) + ", Validation loss = " + str(float(validation_loss) / (len(self.test_loader.dataset) / self.batch)) + " , Validation Accuracy = " + str(float(accuracy)))
 
     def forward(self, img):
         self.model.eval()
